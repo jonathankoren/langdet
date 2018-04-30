@@ -8,3 +8,5 @@ of text is written in. Can be used in multilingual documents.
 `train-langdet.py` is the model trainer. It reads in a file containing text from a known language and the outputs a JSON file containing the corresponding detection model. Various options configure the model, but `--ngramSize 3` is suggested, as classification using single characters, and unicode code planes are not currently supported.
 
 `test-langdet.py` is a sample script for identifying a language. It is very simple, and can be used as an example for integrating language detection into another codebase.
+
+`processWikiAbstracts.py` is a utility function for converting Wikipedia pages into usable text corpora for training purposes.
