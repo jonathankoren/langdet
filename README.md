@@ -9,4 +9,5 @@ of text is written in. Can be used in multilingual documents.
 
 `test-langdet.py` is a sample script for identifying a language. It is very simple, and can be used as an example for integrating language detection into another codebase.
 
-`processWikiAbstracts.py` is a utility function for converting Wikipedia pages into usable text corpora for training purposes.
+`processWikiAbstracts.py` is a utility function for converting Wikipedia pages into usable text corpora for training purposes. Wikipedia abstracts can be obtained from
+`https://dumps.wikimedia.org/enwiki/latest/`, or by running `download-abstracts.sh <lang>`

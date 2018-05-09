@@ -1,3 +1,29 @@
+# Langdet language detection / classification.
+# Jonathan Koren <jonathan@jonathankoren.com>
+#
+# MIT License
+#
+# Copyright (c) 2018 Jonathan Koren
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+
 import math
 import operator
 import sys
@@ -16,7 +42,6 @@ def unicodePlane(c):
     if 0x0400 <= ord(c) and ord(c) <= 0x04FF: return 'Cyrillic'
     if 0x0500 <= ord(c) and ord(c) <= 0x052F: return 'Cyrillic Supplement'
     if 0x0530 <= ord(c) and ord(c) <= 0x058F: return 'Armenian'
-    if 0x0530 <= ord(c) and ord(c) <= 0x058F: return 'Armenian'
     if 0x0590 <= ord(c) and ord(c) <= 0x05FF: return 'Hebrew'
     if 0x0600 <= ord(c) and ord(c) <= 0x06FF: return 'Arabic'
     if 0x0700 <= ord(c) and ord(c) <= 0x074F: return 'Syriac'
@@ -26,7 +51,6 @@ def unicodePlane(c):
     if 0x0800 <= ord(c) and ord(c) <= 0x083F: return 'Samaritan'
     if 0x0840 <= ord(c) and ord(c) <= 0x085F: return 'Mandaic'
     if 0x0860 <= ord(c) and ord(c) <= 0x086F: return 'Syriac Supplement'
-    if 0x08A0 <= ord(c) and ord(c) <= 0x08FF: return 'Arabic Extended-A'
     if 0x08A0 <= ord(c) and ord(c) <= 0x08FF: return 'Arabic Extended-A'
     if 0x0900 <= ord(c) and ord(c) <= 0x097F: return 'Devanagari'
     if 0x0980 <= ord(c) and ord(c) <= 0x09FF: return 'Bengali'
@@ -50,7 +74,6 @@ def unicodePlane(c):
     if 0x1400 <= ord(c) and ord(c) <= 0x167F: return 'Unified Canadian Aboriginal Syllabics'
     if 0x1680 <= ord(c) and ord(c) <= 0x169F: return 'Ogham'
     if 0x16A0 <= ord(c) and ord(c) <= 0x16FF: return 'Runic'
-    if 0x16A0 <= ord(c) and ord(c) <= 0x16FF: return 'Runic'
     if 0x1700 <= ord(c) and ord(c) <= 0x171F: return 'Tagalog'
     if 0x1720 <= ord(c) and ord(c) <= 0x173F: return 'Hanunoo'
     if 0x1740 <= ord(c) and ord(c) <= 0x175F: return 'Buhid'
@@ -58,7 +81,6 @@ def unicodePlane(c):
     if 0x1780 <= ord(c) and ord(c) <= 0x17FF: return 'Khmer'
     if 0x1800 <= ord(c) and ord(c) <= 0x18AF: return 'Mongolian'
     if 0x18B0 <= ord(c) and ord(c) <= 0x18FF: return 'Unified Canadian Aboriginal Syllabics Extended'
-    if 0x1900 <= ord(c) and ord(c) <= 0x194F: return 'Limbu'
     if 0x1900 <= ord(c) and ord(c) <= 0x194F: return 'Limbu'
     if 0x1950 <= ord(c) and ord(c) <= 0x197F: return 'Tai Le'
     if 0x1980 <= ord(c) and ord(c) <= 0x19DF: return 'New Tai Lue'
@@ -74,12 +96,10 @@ def unicodePlane(c):
     if 0x1C80 <= ord(c) and ord(c) <= 0x1C8F: return 'Cyrillic Extended-C'
     if 0x1CC0 <= ord(c) and ord(c) <= 0x1CCF: return 'Sundanese Supplement'
     if 0x1CD0 <= ord(c) and ord(c) <= 0x1CFF: return 'Vedic Extensions'
-    if 0x1CD0 <= ord(c) and ord(c) <= 0x1CFF: return 'Vedic Extensions'
     if 0x1D00 <= ord(c) and ord(c) <= 0x1D7F: return 'Phonetic Extensions'
     if 0x1D80 <= ord(c) and ord(c) <= 0x1DBF: return 'Phonetic Extensions Supplement'
     if 0x1DC0 <= ord(c) and ord(c) <= 0x1DFF: return 'Combining Diacritical Marks Supplement'
     if 0x1E00 <= ord(c) and ord(c) <= 0x1EFF: return 'Latin Extended Additional'
-    if 0x1F00 <= ord(c) and ord(c) <= 0x1FFF: return 'Greek Extended'
     if 0x1F00 <= ord(c) and ord(c) <= 0x1FFF: return 'Greek Extended'
     if 0x2000 <= ord(c) and ord(c) <= 0x206F: return 'General Punctuation'
     if 0x2070 <= ord(c) and ord(c) <= 0x209F: return 'Superscripts and Subscripts'
@@ -112,7 +132,6 @@ def unicodePlane(c):
     if 0x2D30 <= ord(c) and ord(c) <= 0x2D7F: return 'Tifinagh'
     if 0x2D80 <= ord(c) and ord(c) <= 0x2DDF: return 'Ethiopic Extended'
     if 0x2DE0 <= ord(c) and ord(c) <= 0x2DFF: return 'Cyrillic Extended-A'
-    if 0x2E00 <= ord(c) and ord(c) <= 0x2E7F: return 'Supplemental Punctuation'
     if 0x2E00 <= ord(c) and ord(c) <= 0x2E7F: return 'Supplemental Punctuation'
     if 0x2E80 <= ord(c) and ord(c) <= 0x2EFF: return 'CJK Radicals Supplement'
     if 0x2F00 <= ord(c) and ord(c) <= 0x2FDF: return 'Kangxi Radicals'
@@ -148,17 +167,16 @@ def unicodePlane(c):
     if 0xA930 <= ord(c) and ord(c) <= 0xA95F: return 'Rejang'
     if 0xA960 <= ord(c) and ord(c) <= 0xA97F: return 'Hangul Jamo Extended-A'
     if 0xA980 <= ord(c) and ord(c) <= 0xA9DF: return 'Javanese'
-    if 0xA980 <= ord(c) and ord(c) <= 0xA9DF: return 'Javanese'
+    if 0xA9E0 <= ord(c) and ord(c) <= 0xA9FF: return 'Myanmar Extended-B'
     if 0xAA00 <= ord(c) and ord(c) <= 0xAA5F: return 'Cham'
     if 0xAA60 <= ord(c) and ord(c) <= 0xAA7F: return 'Myanmar Extended-A'
     if 0xAA80 <= ord(c) and ord(c) <= 0xAADF: return 'Tai Viet'
     if 0xAAE0 <= ord(c) and ord(c) <= 0xAAFF: return 'Meetei Mayek Extensions'
     if 0xAB00 <= ord(c) and ord(c) <= 0xAB2F: return 'Ethiopic Extended-A'
-    if 0xAB00 <= ord(c) and ord(c) <= 0xAB2F: return 'Ethiopic Extended-A'
-    if 0xAB00 <= ord(c) and ord(c) <= 0xAB2F: return 'Ethiopic Extended-A'
+    if 0xAB30 <= ord(c) and ord(c) <= 0xAB6F: return 'Latin Extended-E'
+    if 0xAB70 <= ord(c) and ord(c) <= 0xABBF: return 'Cherokee Supplement'
     if 0xABC0 <= ord(c) and ord(c) <= 0xABFF: return 'Meetei Mayek'
     if 0xAC00 <= ord(c) and ord(c) <= 0xD7AF: return 'Hangul Syllables'
-    if 0xD7B0 <= ord(c) and ord(c) <= 0xD7FF: return 'Hangul Jamo Extended-B'
     if 0xD7B0 <= ord(c) and ord(c) <= 0xD7FF: return 'Hangul Jamo Extended-B'
     if 0xD800 <= ord(c) and ord(c) <= 0xDB7F: return 'High Surrogates'
     if 0xDB80 <= ord(c) and ord(c) <= 0xDBFF: return 'High Private Use Surrogates'
@@ -174,7 +192,6 @@ def unicodePlane(c):
     if 0xFE50 <= ord(c) and ord(c) <= 0xFE6F: return 'Small Form Variants'
     if 0xFE70 <= ord(c) and ord(c) <= 0xFEFF: return 'Arabic Presentation Forms-B'
     if 0xFF00 <= ord(c) and ord(c) <= 0xFFEF: return 'Halfwidth and Fullwidth Forms'
-    if 0xFFF0 <= ord(c) and ord(c) <= 0xFFFF: return 'Specials'
     if 0xFFF0 <= ord(c) and ord(c) <= 0xFFFF: return 'Specials'
     if 0x10000 <= ord(c) and ord(c) <= 0x1007F: return 'Linear B Syllabary'
     if 0x10080 <= ord(c) and ord(c) <= 0x100FF: return 'Linear B Ideograms'
@@ -197,7 +214,6 @@ def unicodePlane(c):
     if 0x10500 <= ord(c) and ord(c) <= 0x1052F: return 'Elbasan'
     if 0x10530 <= ord(c) and ord(c) <= 0x1056F: return 'Caucasian Albanian'
     if 0x10600 <= ord(c) and ord(c) <= 0x1077F: return 'Linear A'
-    if 0x10600 <= ord(c) and ord(c) <= 0x1077F: return 'Linear A'
     if 0x10800 <= ord(c) and ord(c) <= 0x1083F: return 'Cypriot Syllabary'
     if 0x10840 <= ord(c) and ord(c) <= 0x1085F: return 'Imperial Aramaic'
     if 0x10860 <= ord(c) and ord(c) <= 0x1087F: return 'Palmyrene'
@@ -218,7 +234,6 @@ def unicodePlane(c):
     if 0x10C00 <= ord(c) and ord(c) <= 0x10C4F: return 'Old Turkic'
     if 0x10C80 <= ord(c) and ord(c) <= 0x10CFF: return 'Old Hungarian'
     if 0x10E60 <= ord(c) and ord(c) <= 0x10E7F: return 'Rumi Numeral Symbols'
-    if 0x10E60 <= ord(c) and ord(c) <= 0x10E7F: return 'Rumi Numeral Symbols'
     if 0x11000 <= ord(c) and ord(c) <= 0x1107F: return 'Brahmi'
     if 0x11080 <= ord(c) and ord(c) <= 0x110CF: return 'Kaithi'
     if 0x110D0 <= ord(c) and ord(c) <= 0x110FF: return 'Sora Sompeng'
@@ -234,6 +249,7 @@ def unicodePlane(c):
     if 0x11480 <= ord(c) and ord(c) <= 0x114DF: return 'Tirhuta'
     if 0x11580 <= ord(c) and ord(c) <= 0x115FF: return 'Siddham'
     if 0x11600 <= ord(c) and ord(c) <= 0x1165F: return 'Modi'
+    if 0x11660 <= ord(c) and ord(c) <= 0x1167F: return 'Mongolian Supplement'
     if 0x11680 <= ord(c) and ord(c) <= 0x116CF: return 'Takri'
     if 0x11700 <= ord(c) and ord(c) <= 0x1173F: return 'Ahom'
     if 0x118A0 <= ord(c) and ord(c) <= 0x118FF: return 'Warang Citi'
@@ -243,7 +259,6 @@ def unicodePlane(c):
     if 0x11C00 <= ord(c) and ord(c) <= 0x11C6F: return 'Bhaiksuki'
     if 0x11C70 <= ord(c) and ord(c) <= 0x11CBF: return 'Marchen'
     if 0x11D00 <= ord(c) and ord(c) <= 0x11D5F: return 'Masaram Gondi'
-    if 0x11660 <= ord(c) and ord(c) <= 0x1167F: return 'Mongolian Supplement'
     if 0x12000 <= ord(c) and ord(c) <= 0x123FF: return 'Cuneiform'
     if 0x12400 <= ord(c) and ord(c) <= 0x1247F: return 'Cuneiform Numbers and Punctuation'
     if 0x12480 <= ord(c) and ord(c) <= 0x1254F: return 'Early Dynastic Cuneiform'
@@ -262,11 +277,8 @@ def unicodePlane(c):
     if 0x1B170 <= ord(c) and ord(c) <= 0x1B2FF: return 'Nushu'
     if 0x1BC00 <= ord(c) and ord(c) <= 0x1BC9F: return 'Duployan'
     if 0x1BCA0 <= ord(c) and ord(c) <= 0x1BCAF: return 'Shorthand Format Controls'
-    if 0x1BCA0 <= ord(c) and ord(c) <= 0x1BCAF: return 'Shorthand Format Controls'
-    if 0x1BCA0 <= ord(c) and ord(c) <= 0x1BCAF: return 'Shorthand Format Controls'
     if 0x1D000 <= ord(c) and ord(c) <= 0x1D0FF: return 'Byzantine Musical Symbols'
     if 0x1D100 <= ord(c) and ord(c) <= 0x1D1FF: return 'Musical Symbols'
-    if 0x1D200 <= ord(c) and ord(c) <= 0x1D24F: return 'Ancient Greek Musical Notation'
     if 0x1D200 <= ord(c) and ord(c) <= 0x1D24F: return 'Ancient Greek Musical Notation'
     if 0x1D300 <= ord(c) and ord(c) <= 0x1D35F: return 'Tai Xuan Jing Symbols'
     if 0x1D360 <= ord(c) and ord(c) <= 0x1D37F: return 'Counting Rod Numerals'
@@ -275,7 +287,6 @@ def unicodePlane(c):
     if 0x1E000 <= ord(c) and ord(c) <= 0x1E02F: return 'Glagolitic Supplement'
     if 0x1E800 <= ord(c) and ord(c) <= 0x1E8DF: return 'Mende Kikakui'
     if 0x1E900 <= ord(c) and ord(c) <= 0x1E95F: return 'Adlam'
-    if 0x1EE00 <= ord(c) and ord(c) <= 0x1EEFF: return 'Arabic Mathematical Alphabetic Symbols'
     if 0x1EE00 <= ord(c) and ord(c) <= 0x1EEFF: return 'Arabic Mathematical Alphabetic Symbols'
     if 0x1F000 <= ord(c) and ord(c) <= 0x1F02F: return 'Mahjong Tiles'
     if 0x1F030 <= ord(c) and ord(c) <= 0x1F09F: return 'Domino Tiles'
@@ -297,6 +308,7 @@ def unicodePlane(c):
     if 0x2CEB0 <= ord(c) and ord(c) <= 0x2EBEF: return 'CJK Unified Ideographs Extension F'
     if 0x2F800 <= ord(c) and ord(c) <= 0x2FA1F: return 'CJK Compatibility Ideographs Supplement'
     if 0xE0000 <= ord(c) and ord(c) <= 0xE007F: return 'Tags'
+    if 0xE0100 <= ord(c) and ord(c) <= 0xE01EF: return 'Variation Selectors Supplement'
     if 0xF0000 <= ord(c) and ord(c) <= 0xFFFFF: return 'Supplementary Private Use Area-A'
     if 0x100000 <= ord(c) and ord(c) <= 0x10FFFF: return 'Supplementary Private Use Area-B'
 
@@ -425,7 +437,9 @@ def classify(inStream, modelMap):
     '''Takes an input stream and a map of language codes to models, and returns
     the language code that best describes the input stream.
 
-    IMPORTANT: All models must have the same ngramSize.'''
+    IMPORTANT: All models must have the same ngramSize.
+    IMPORTANT: Only ngrams are used. `singleChars` and `unicodePlanes` features
+               ignored'''
     ngramSize = list(modelMap.items())[0][1].get('ngramSize', 0)
 
     (singleCharCounts, ngramCounts, unicodePlaneCounts) = processStream(inStream, ngramSize)
